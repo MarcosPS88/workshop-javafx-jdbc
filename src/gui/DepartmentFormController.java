@@ -1,9 +1,12 @@
 package gui;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import db.DbException;
+import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Constraints;
 import gui.util.Utils;
@@ -19,8 +22,10 @@ import model.services.DepartmentService;
 
 public class DepartmentFormController implements Initializable {
 
+	//Criando referencias para classes que serão usadas
 	private  DepartmentService service;
 	private Department department;
+	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
 	
 	@FXML
 	private Button btSave;
@@ -35,10 +40,6 @@ public class DepartmentFormController implements Initializable {
 
 	@FXML
 	public void onBtSaveAction(ActionEvent event) {
-		if(department.getName() == null) {
-			throw new IllegalStateException("Department was null");		
-		}
-		
 		if (department == null) {
 			throw new IllegalStateException("Department was null");		
 		}
@@ -48,12 +49,20 @@ public class DepartmentFormController implements Initializable {
 		try {
 		department = getFormData();		
 		service.saveOrUpdate(department);
+		notifyDataChangeListeners();
 		Utils.currentStage(event).close();;
 		}catch(DbException e) {
 			Alerts.showAlert("Error saving object", null, e.getMessage(),AlertType.ERROR);
 		}
 	}
 	
+	//Notificação para o Observer
+	private void notifyDataChangeListeners() {
+		for(DataChangeListener listener : dataChangeListeners) {
+			listener.onDataChanged();
+		}
+	}
+
 	private Department getFormData() {
 		Department obj = new Department();
 		
@@ -83,6 +92,11 @@ public class DepartmentFormController implements Initializable {
 	
 	public void setDepartmentService(DepartmentService service) {
 		this.service = service;
+	}
+	
+	//Adicionando listeners (observers)
+	public void subscribeDataChangeListener(DataChangeListener listener) {
+		dataChangeListeners.add(listener);
 	}
 	
 	public void updateFormData() {

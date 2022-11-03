@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import application.Main;
+import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Utils;
 import javafx.collections.FXCollections;
@@ -26,7 +27,7 @@ import javafx.stage.Stage;
 import model.entities.Department;
 import model.services.DepartmentService;
 
-public class DepartmentListController implements Initializable {
+public class DepartmentListController implements Initializable, DataChangeListener {
 	//Não instanciado por esta classe. É necessário fazer uma injeção de dependencia com o medoto setDepartmentService
 	private DepartmentService service;
 	
@@ -88,9 +89,12 @@ public class DepartmentListController implements Initializable {
 			//Criando referencia ao controlador do formulario
 			DepartmentFormController controller = loader.getController();
 			controller.setDepartment(obj); // Injetando o Department no controlador
+			
+			//Inscrevendo essa classe como listener do DataChangeListener
+			controller.subscribeDataChangeListener(this);
+			
 			controller.updateFormData(); //Atualizando o formulário com dados da Estancia do Department
 			controller.setDepartmentService(new DepartmentService());
-			
 			
 			Stage dialogStage = new Stage();
 			dialogStage.setTitle("Enter Department data");
@@ -103,6 +107,12 @@ public class DepartmentListController implements Initializable {
 			Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), AlertType.ERROR);
 		}
 		
+	}
+
+	//Medotod que executado com a lista altera para atualizar a tabela
+	@Override 
+	public void onDataChanged() {
+		updateTableView();
 	}
 
 }
