@@ -34,6 +34,8 @@ public class MainViewController implements Initializable {
 
 	@FXML
 	public void onMenuItemDepartmentAction() {
+		//Expressão lambda que inicializa o DepartmentService e passa como parametro para LoadView
+		//Sem isso, teria q fazer um loadView para cada View que fosse criada.
 		loadView("/gui/DepartmentList.fxml", (DepartmentListController controller) ->{
 			controller.setDepartmentService(new DepartmentService());
 			controller.updateTableView();
