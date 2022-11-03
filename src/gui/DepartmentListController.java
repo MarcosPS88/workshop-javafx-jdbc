@@ -1,18 +1,27 @@
 package gui;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import application.Main;
+import gui.util.Alerts;
+import gui.util.Utils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entities.Department;
 import model.services.DepartmentService;
@@ -20,8 +29,6 @@ import model.services.DepartmentService;
 public class DepartmentListController implements Initializable {
 	//Não instanciado por esta classe. É necessário fazer uma injeção de dependencia com o medoto setDepartmentService
 	private DepartmentService service;
-	
-	
 	
 	@FXML
 	private Button btNew;
@@ -36,8 +43,9 @@ public class DepartmentListController implements Initializable {
 	
 	
 	@FXML
-	public void onBtNewAction() {
-		System.out.println("onBtNewAction");
+	public void onBtNewAction(ActionEvent event) {
+		Stage parentStage = Utils.currentSate(event);
+		createDiaologForm("/gui/DepartmentForm.fxml", parentStage);
 	}
 	
 	// Inversão de controle. Metodo para injetar a dependencia do DepartmentService
@@ -67,7 +75,26 @@ public class DepartmentListController implements Initializable {
 		List<Department> list = service.findAll(); 
 		obsList = FXCollections.observableArrayList(list); 
 		tableViewDepartment.setItems(obsList);
-
+	}
+	
+	//Metodo para criar uma nova Stage para abrir o DialogForm
+	private void createDiaologForm(String absoluteName, Stage parentStage) {
+		try {
+			//Parametro recebido do metodo ACtion do Botao 
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+			Pane pane = loader.load();
+			
+			Stage dialogStage = new Stage();
+			dialogStage.setTitle("Enter Department data");
+			dialogStage.setScene(new Scene(pane));
+			dialogStage.setResizable(false);
+			dialogStage.initOwner(parentStage); //Pega a referencia do Stage Anterior (Parent)
+			dialogStage.initModality(Modality.WINDOW_MODAL);
+			dialogStage.showAndWait();
+		}catch (IOException e) {
+			Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), AlertType.ERROR);
+		}
+		
 	}
 
 }
