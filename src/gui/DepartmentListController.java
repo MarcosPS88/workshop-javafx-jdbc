@@ -45,7 +45,8 @@ public class DepartmentListController implements Initializable {
 	@FXML
 	public void onBtNewAction(ActionEvent event) {
 		Stage parentStage = Utils.currentSate(event);
-		createDiaologForm("/gui/DepartmentForm.fxml", parentStage);
+		Department obj = new Department();
+		createDiaologForm(obj, "/gui/DepartmentForm.fxml", parentStage);
 	}
 	
 	// Inversão de controle. Metodo para injetar a dependencia do DepartmentService
@@ -78,11 +79,15 @@ public class DepartmentListController implements Initializable {
 	}
 	
 	//Metodo para criar uma nova Stage para abrir o DialogForm
-	private void createDiaologForm(String absoluteName, Stage parentStage) {
+	private void createDiaologForm(Department obj, String absoluteName, Stage parentStage) {
 		try {
 			//Parametro recebido do metodo ACtion do Botao 
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
+			//Criando referencia ao controlador do formulario
+			DepartmentFormController controller = loader.getController();
+			controller.setDepartment(obj); // Injetando o Department no controlador
+			controller.updateFormData(); //Atualizando o formulário com dados da Estancia do Department
 			
 			Stage dialogStage = new Stage();
 			dialogStage.setTitle("Enter Department data");
