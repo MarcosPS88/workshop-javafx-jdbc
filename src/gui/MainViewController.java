@@ -32,14 +32,13 @@ public class MainViewController implements Initializable {
 
 	@FXML
 	public void onMenuItemDepartmentAction() {
-		System.out.println("onMenuItemDepartmentAction");
+		loadView("/gui/DepartmentList.fxml");
 	}
 	
 	@FXML
-	public void onMenuItemAboutrAction() {
+	public void onMenuItemAboutAction() {
 		loadView("/gui/About.fxml");
 	}
-	
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
@@ -65,7 +64,5 @@ public class MainViewController implements Initializable {
 			Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), AlertType.ERROR);
 		}
 	}
-
-	
 	
 }
