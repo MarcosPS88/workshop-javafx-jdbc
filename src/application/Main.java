@@ -8,6 +8,10 @@ import javafx.stage.Stage;
 
 
 public class Main extends Application {
+	
+	//Referencia ao mainScene para que seja passado à outras views
+	private static Scene mainScene;
+	
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -15,7 +19,7 @@ public class Main extends Application {
 			ScrollPane scrollPane = loader.load();
 			scrollPane.setFitToHeight(true);
 			scrollPane.setFitToWidth(true);
-			Scene mainScene = new Scene(scrollPane);
+			mainScene = new Scene(scrollPane);
 			primaryStage.setScene(mainScene);
 			primaryStage.setTitle("Sample JavaFX application");
 			primaryStage.show();
@@ -26,5 +30,11 @@ public class Main extends Application {
 	
 	public static void main(String[] args) {
 		launch(args);
+	}
+	
+	
+	//Metodo que exporta a referência ao mainScene
+	public static Scene getMainScene() {
+		return mainScene;
 	}
 }
