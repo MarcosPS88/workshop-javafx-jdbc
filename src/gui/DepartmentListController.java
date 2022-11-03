@@ -44,7 +44,8 @@ public class DepartmentListController implements Initializable {
 	
 	@FXML
 	public void onBtNewAction(ActionEvent event) {
-		Stage parentStage = Utils.currentSate(event);
+		Stage parentStage = Utils.currentStage(event);
+		//Criando new Department para passar a referencia para o metodo createDialogForm
 		Department obj = new Department();
 		createDiaologForm(obj, "/gui/DepartmentForm.fxml", parentStage);
 	}
@@ -88,6 +89,8 @@ public class DepartmentListController implements Initializable {
 			DepartmentFormController controller = loader.getController();
 			controller.setDepartment(obj); // Injetando o Department no controlador
 			controller.updateFormData(); //Atualizando o formulário com dados da Estancia do Department
+			controller.setDepartmentService(new DepartmentService());
+			
 			
 			Stage dialogStage = new Stage();
 			dialogStage.setTitle("Enter Department data");
