@@ -101,28 +101,20 @@ public class DepartmentDaoImplJDBC implements DepartmentDao {
 		try {
 			
 			conn.setAutoCommit(false);
-			
 			st = conn.prepareStatement(sql);
-			
 			st.setInt(1, id);
-			
 			int rows = st.executeUpdate();
-			
 			conn.commit();
-
 			System.out.println("Data deleted!");
-			
 			if(rows == 0) {
 				throw new DbException("Invalid Id!");
 			}
 			
 			
 		} catch (SQLException e) {
-			
 			throw new DbIntegrityException("Error: " + e.getMessage());
 			
 		}finally {
-			
 			DB.closeStatement(st);
 			
 		}
@@ -143,8 +135,6 @@ public class DepartmentDaoImplJDBC implements DepartmentDao {
 			rs = st.executeQuery();
 			
 			while(rs.next()) {
-				
-				
 				
 				Department dep = instantiateDepartment(rs); 				
 				return dep;
