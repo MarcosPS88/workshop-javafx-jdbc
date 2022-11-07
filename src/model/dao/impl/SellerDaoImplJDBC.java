@@ -221,7 +221,7 @@ public class SellerDaoImplJDBC implements SellerDao {
 		if(tsmt != null) {
 			sel.setBirthDate(new Date(tsmt.getTime()));
 		}
-		
+		//sel.setBirthDate(new java.util.Date(rs.getTimestamp("BirthDate").getTime()));
 		sel.setDepartment(dep);
 		return sel;
 	}
