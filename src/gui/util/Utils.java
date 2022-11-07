@@ -29,6 +29,15 @@ public class Utils {
 			return null;
 		}
 	}
+
+	//Metodo para tentar fazer o Parse de String para Double
+	public static Double tryParseToDouble(String str) {
+		try {
+			return Double.parseDouble(str);
+		}catch(NumberFormatException e) {
+			return null;
+		}
+	}
 	
 	//Metodo para formatar a data na TableVieTable
 	 public static <T> void formatTableColumnDate(TableColumn<T, Date> tableColumn, String format){
